@@ -1,6 +1,6 @@
 import NavBar from "./components/NavBar"
 import SearchBar from "./components/SearchBar"
-import Map from "./components/Map"
+import Map from "./components/MapWrapper"
 import Card from "./components/Card"
 
 
@@ -87,20 +87,25 @@ const Home = async () => {
       <SearchBar/>
       <main>
           <article>
-            listings
-             <Map/>
+            <Map properties={properties} />
           </article>
           <article className="listings">
              <h2>Rental listings</h2>
-             <div className="card-container"> {/* pass data into cards */}
-                {properties.map(property => <Card
-                    key={property.id}
-                    propertyName={property.name}
-                    slug={property.slug}
-                    rentalPrice={property.rentalPrice}
-                    beds={property.beds}
-                    images={property.images[0]}
-                />)}
+             <div className="card-container">
+                {properties.length > 0 ? (
+                    properties.map(property => (
+                        <Card
+                            key={property.id}
+                            propertyName={property.name}
+                            slug={property.slug}
+                            rentalPrice={property.rentalPrice}
+                            beds={property.beds}
+                            image={property.images?.[0]}
+                        />
+                    ))
+                ) : (
+                    <p>No properties found.</p>
+                )}
              </div>
           </article>
 

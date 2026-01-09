@@ -1,0 +1,26 @@
+# Hygraph Schema Reference
+# This is a reference file showing the expected GraphQL schema structure
+# Use this as a guide when setting up your Hygraph project
+
+# Embedded Location Model
+type Location {
+  latitude: Float!
+  longitude: Float!
+}
+
+# Main Property Model
+type Property {
+  id: ID!
+  name: String!
+  slug: String! @unique
+  beds: Int!
+  rentalPrice: Int!
+  description: RichText
+  images: [Asset!]
+  location: Location!
+}
+
+# Asset Model (built-in to Hygraph)
+# No need to create - automatically available for file uploads
+# Fields used: url, fileName
+

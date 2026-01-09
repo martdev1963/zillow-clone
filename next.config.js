@@ -2,7 +2,20 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'media.graphassets.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.graphassets.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'hygraph.com',
+      },
+    ],
   },
 }
 
