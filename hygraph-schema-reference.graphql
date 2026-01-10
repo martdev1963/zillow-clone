@@ -16,7 +16,7 @@ type Property {
   beds: Int!
   rentalPrice: Int!
   description: RichText
-  images: [Asset!]
+  image: Asset
   location: Location!
 }
 

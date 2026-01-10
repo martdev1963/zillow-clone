@@ -18,7 +18,7 @@
   - `beds` (Integer, Required)
   - `rentalPrice` (Integer, Required)
   - `description` (Rich text, Optional)
-  - `images` (Asset, Multiple, Optional)
+  - `image` (Asset, Single, Optional) - Note: Free tier uses single image
   - `location` (Location - embedded, Required)
 
 ### 3. Set Permissions
@@ -50,7 +50,7 @@ HYGRAPH_API_TOKEN=your_token_here
 | beds | Integer | ✅ | Number of bedrooms |
 | rentalPrice | Integer | ✅ | Monthly rent (no decimals) |
 | description | Rich text | ❌ | Property details |
-| images | Asset (multiple) | ❌ | Upload property photos |
+| image | Asset (single) | ❌ | Upload property photo (free tier limitation) |
 | location | Location (embedded) | ✅ | Coordinates |
 
 ### Location Model Fields
@@ -72,7 +72,7 @@ Description: Beautiful 2-bedroom apartment with ocean views.
 Location:
   Latitude: 26.7056
   Longitude: -80.0364
-Images: [Upload 2-3 photos]
+Image: Upload 1 photo
 ```
 
 ### Property 2
@@ -85,7 +85,7 @@ Description: Modern loft in the heart of downtown.
 Location:
   Latitude: 25.7617
   Longitude: -80.1918
-Images: [Upload 2-3 photos]
+Image: Upload 1 photo
 ```
 
 ## Testing Your Schema
@@ -104,7 +104,7 @@ query TestQuery {
       latitude
       longitude
     }
-    images {
+    image {
       url
       fileName
     }
@@ -120,7 +120,9 @@ If this works, your schema is set up correctly! 🎉
 → Check model name is exactly `Property` (singular)
 
 **Images not loading**
-→ Verify `images` field allows multiple assets
+→ Verify `image` field is set to Asset type (single, not multiple)
+→ Check that image URL is from media.graphassets.com domain
+→ Ensure image is uploaded and published in Hygraph
 
 **Location is null**
 → Make sure Location is embedded (not a relation)

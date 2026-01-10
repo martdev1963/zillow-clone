@@ -155,6 +155,30 @@ article.listings {
     z-index: 1;
 }
 
+/* Fix Leaflet CSS warnings - override old IE properties that cause console errors */
+.leaflet-container img,
+.leaflet-container svg,
+.leaflet-container canvas {
+    image-rendering: auto !important;
+}
+
+.leaflet-container * {
+    /* Suppress old IE behavior property */
+    behavior: unset !important;
+    /* Remove old IE filter with progid */
+    filter: none !important;
+    -ms-filter: none !important;
+    -webkit-filter: none !important;
+}
+
+/* Fix transition-property parsing errors from Leaflet CSS */
+.leaflet-container *,
+.leaflet-container *::before,
+.leaflet-container *::after {
+    /* Override invalid transition-property values */
+    transition-property: opacity, transform, visibility !important;
+}
+
     /* vid_time: 33:32 / 1:24:05 */
 
 

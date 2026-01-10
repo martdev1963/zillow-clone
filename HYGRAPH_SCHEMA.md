@@ -47,7 +47,7 @@ Your app needs one main model: **Property**
 | Beds | `beds` | Integer | ✅ Yes | Number of bedrooms |
 | Rental Price | `rentalPrice` | Integer | ✅ Yes | Monthly rental price |
 | Description | `description` | Rich text | ❌ No | Property description |
-| Images | `images` | Asset | ❌ No | Property images (multiple) |
+| Image | `image` | Asset | ❌ No | Property image (single - free tier limitation) |
 | Location | `location` | Location (embedded) | ✅ Yes | Property location coordinates |
 
 **Field Configuration:**
@@ -78,10 +78,10 @@ Your app needs one main model: **Property**
   - Required: No
   - Validations: None
 
-- **Images** (`images`):
+- **Image** (`image`):
   - Type: Asset
   - Required: No
-  - Allow multiple: ✅ Yes
+  - Allow multiple: ❌ No (free tier limitation - use single image)
   - Allowed file types: Images only
 
 - **Location** (`location`):
@@ -110,7 +110,7 @@ After creating the schema, add some sample properties:
 - Location:
   - Latitude: `26.7056`
   - Longitude: `-80.0364`
-- Images: Upload 2-3 property images
+- Image: Upload 1 property image
 
 **Example Property 2:**
 - Name: `Downtown Miami Loft`
@@ -121,7 +121,7 @@ After creating the schema, add some sample properties:
 - Location:
   - Latitude: `25.7617`
   - Longitude: `-80.1918`
-- Images: Upload 2-3 property images
+- Image: Upload 1 property image
 
 **Example Property 3:**
 - Name: `Beachfront Condo`
@@ -132,7 +132,7 @@ After creating the schema, add some sample properties:
 - Location:
   - Latitude: `25.7907`
   - Longitude: `-80.1300`
-- Images: Upload 2-3 property images
+- Image: Upload 1 property image
 
 ## GraphQL Queries Reference
 
@@ -144,7 +144,7 @@ query PropertiesQuery {
   properties {
     beds
     description
-    images {
+    image {
       fileName
       url
     }
@@ -166,7 +166,7 @@ query PropertyQuery($slug: String!) {
   property(where: { slug: $slug }) {
     beds
     description
-    images {
+    image {
       fileName
       url
     }
@@ -195,7 +195,7 @@ Property (Model)
 ├── beds (Integer, Required)
 ├── rentalPrice (Integer, Required)
 ├── description (Rich text, Optional)
-├── images (Asset, Multiple, Optional)
+├── image (Asset, Single, Optional) - Free tier limitation
 └── location (Location, Required)
 ```
 
@@ -206,9 +206,11 @@ Property (Model)
 
 ### Issue: Images not showing
 - **Solution**: 
-  1. Make sure images are uploaded as Assets
-  2. Check that `images` field allows multiple assets
+  1. Make sure image is uploaded as an Asset
+  2. Check that `image` field is set to Asset type (single, not multiple)
   3. Verify public read access for Assets
+  4. Ensure the image URL domain matches your `next.config.js` remotePatterns
+  5. Make sure the image is published in Hygraph (not just saved as draft)
 
 ### Issue: Location data not working
 - **Solution**: 

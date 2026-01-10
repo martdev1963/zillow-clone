@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import NavBar from '../../components/NavBar'
 
 const getProperty = async (slug) => {
     const HYGRAPH_ENDPOINT = process.env.HYGRAPH_ENDPOINT
@@ -42,13 +43,22 @@ const getProperty = async (slug) => {
             })
         })
         
+        // Parse JSON even if response is not ok to get error details
+        const json = await response.json()
+        
         if (!response.ok) {
+            console.error("HTTP error in property query:", response.status, JSON.stringify(json, null, 2))
             return null
         }
         
-        const json = await response.json()
+        // Log response for debugging
+        if (json.errors) {
+            console.error("GraphQL errors in property query:", JSON.stringify(json.errors, null, 2))
+            return null
+        }
         
-        if (json.errors || !json.data?.property) {
+        if (!json.data?.property) {
+            console.error("No property found in response:", JSON.stringify(json, null, 2))
             return null
         }
         
@@ -60,14 +70,20 @@ const getProperty = async (slug) => {
 }
 
 const PropertyPage = async ({ params }) => {
-    const property = await getProperty(params.slug)
+    // In Next.js 14+, params might be a promise
+    const resolvedParams = await params
+    const slug = resolvedParams.slug
+    
+    const property = await getProperty(slug)
     
     if (!property) {
+        console.error("Property not found for slug:", slug)
         notFound()
     }
     
     return (
         <>
+            <NavBar />
             <div style={{ padding: '20px', maxWidth: '1200px', margin: '0 auto' }}>
                 <Link href="/" style={{ color: '#006AFF', textDecoration: 'none', marginBottom: '20px', display: 'inline-block' }}>
                     ← Back to listings
@@ -78,31 +94,32 @@ const PropertyPage = async ({ params }) => {
                 <div style={{ display: 'flex', gap: '20px', marginTop: '20px', flexWrap: 'wrap' }}>
                     <div style={{ flex: '1', minWidth: '300px' }}>
                         {property.images && property.images.length > 0 && (
-                            <div style={{ marginBottom: '20px' }}>
-                                <Image
-                                    src={property.images[0].url}
-                                    alt={property.images[0].fileName || property.name}
-                                    width={600}
-                                    height={400}
-                                    style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
-                                    priority
-                                />
-                            </div>
-                        )}
-                        
-                        {property.images && property.images.length > 1 && (
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px' }}>
-                                {property.images.slice(1).map((image, index) => (
+                            <>
+                                <div style={{ marginBottom: '20px' }}>
                                     <Image
-                                        key={index}
-                                        src={image.url}
-                                        alt={image.fileName || `${property.name} - Image ${index + 2}`}
-                                        width={200}
-                                        height={150}
+                                        src={property.images[0].url}
+                                        alt={property.images[0].fileName || property.name}
+                                        width={600}
+                                        height={400}
                                         style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+                                        priority
                                     />
-                                ))}
-                            </div>
+                                </div>
+                                {property.images.length > 1 && (
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px' }}>
+                                        {property.images.slice(1).map((image, index) => (
+                                            <Image
+                                                key={index}
+                                                src={image.url}
+                                                alt={image.fileName || `${property.name} - Image ${index + 2}`}
+                                                width={200}
+                                                height={150}
+                                                style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </>
                         )}
                     </div>
                     
