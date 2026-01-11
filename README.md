@@ -44,7 +44,7 @@ HYGRAPH_API_TOKEN=your_hygraph_api_token_here
 
 See `ENV_SETUP.md` for detailed instructions.
 
-### 3. Run Development Server
+### 4. Run Development Server
 
 ```bash
 npm run dev
@@ -76,6 +76,21 @@ zillow-clone/
 npm run build
 npm start
 ```
+
+## Deployment
+
+### Deploy to Render.com
+
+See `DEPLOY_RENDER.md` for a complete step-by-step guide to deploy your app to Render.com.
+
+**Quick steps:**
+1. Push your code to GitHub
+2. Create a new Web Service on Render.com
+3. Connect your GitHub repository
+4. Add environment variables (`HYGRAPH_ENDPOINT` and `HYGRAPH_API_TOKEN`)
+5. Deploy!
+
+The app will be live at `https://your-app-name.onrender.com`
 
 ## License
 

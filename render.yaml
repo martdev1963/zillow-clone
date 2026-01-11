@@ -1,0 +1,24 @@
+# Render.com Configuration File
+# This file makes deployment easier - you can use it instead of manual configuration
+# Place this file in your repository root
+
+services:
+  - type: web
+    name: zillow-clone
+    env: node
+    # Build command - installs dependencies and builds the Next.js app
+    buildCommand: npm install && npm run build
+    # Start command - runs the production server
+    startCommand: npm start
+    # Environment variables - ADD THESE IN RENDER DASHBOARD, NOT HERE!
+    # Never commit actual values to git
+    envVars:
+      - key: HYGRAPH_ENDPOINT
+        sync: false  # Set this manually in Render dashboard
+      - key: HYGRAPH_API_TOKEN
+        sync: false  # Set this manually in Render dashboard
+    # Region - choose closest to your users
+    region: oregon
+    # Plan - free tier
+    plan: free
+
